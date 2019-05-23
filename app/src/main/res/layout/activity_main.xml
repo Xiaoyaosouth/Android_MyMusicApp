@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:src="@drawable/disk"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="musicName"
+        android:id="@+id/currentMusicName"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:textSize="30dp"/>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/seekBar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="currentTime"
+        android:id="@+id/currentMusicTime" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="totalTime"
+            android:id="@+id/totalMusicTime"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+        <Button
+            android:id="@+id/prevMusic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@android:drawable/ic_media_previous"
+            android:layout_marginRight="20dp"/>
+        <Button
+            android:id="@+id/play"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/play"/>
+        <Button
+            android:id="@+id/nextMusic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@android:drawable/ic_media_next"
+            android:layout_marginLeft="20dp"/>
+        <Button
+            android:id="@+id/repeatThis"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/loop"
+            android:layout_marginLeft="70dp"/>
+    </LinearLayout>
+</LinearLayout>

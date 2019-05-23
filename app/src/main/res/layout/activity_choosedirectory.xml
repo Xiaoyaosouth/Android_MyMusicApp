@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_choosedirectory"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <LinearLayout
+        android:id="@+id/relativeLayout_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/editText_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="12dp"
+            android:layout_weight="2"
+            android:text="edit"
+            android:imeOptions="actionDone" />
+        <Button
+            android:id="@+id/button_upDirectory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上一级" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/checkbox_scanChildDir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="同时扫描子目录"
+            android:layout_weight="1"
+            android:checked="true"/>
+        <Button
+            android:id="@+id/button_scanDirectory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫描当前目录"
+            android:layout_weight="2"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#666666"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerView_directory" />
+</LinearLayout>

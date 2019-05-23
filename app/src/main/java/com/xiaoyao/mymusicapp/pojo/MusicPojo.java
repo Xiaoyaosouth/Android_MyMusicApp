@@ -10,6 +10,7 @@ public class MusicPojo extends DataSupport{
     private String musicPath;
     private String musicArtist;
     private int musicDuration;
+    private boolean isLove;
 
     public MusicPojo(){}
     public MusicPojo(File file){
@@ -55,5 +56,13 @@ public class MusicPojo extends DataSupport{
 
     public void setMusicDuration(int musicDuration) {
         this.musicDuration = musicDuration;
+    }
+
+    public boolean isLove() {
+        return isLove;
+    }
+
+    public void setLove(boolean love) {
+        isLove = love;
     }
 }

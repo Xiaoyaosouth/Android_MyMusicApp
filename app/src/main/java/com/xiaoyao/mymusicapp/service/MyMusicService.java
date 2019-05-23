@@ -137,6 +137,15 @@ public class MyMusicService extends Service {
             }
             return false;
         }
+
+        // 判断是否处于循环播放状态
+        public boolean isLooping(){
+            if (myMediaPlayer.isLooping()){
+                return true;
+            }else{
+                return false;
+            }
+        }
     }
 
     @Override

@@ -34,6 +34,7 @@ public class PlayerActivity extends BaseActivity {
                             updateTotalMusicTime();
                             updatePlayButtonBackground();
                             updateSeekBar();
+                            updateLoopBackground();
                         }
                     }catch (Exception e){ e.printStackTrace(); }
                     sendEmptyMessageDelayed(STARTHANDLER, 1000); // 若已触发则定时1000毫秒执行
@@ -45,14 +46,12 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_player);
 
         this.registBroadcastReceiver(); // 注册广播接收器
         Intent bindIntent = new Intent(PlayerActivity.this, MyMusicService.class);
         bindService(bindIntent, myMusicConnection, this.BIND_AUTO_CREATE);
         initComp();
-
-        isPermissed = getPermission(); // 获取SD卡读写权限
     }
 
 
@@ -262,6 +261,17 @@ public class PlayerActivity extends BaseActivity {
         if (myMusicBinder != null){
             seekBar.setMax(myMusicBinder.getDuration()); // 设置最大值
             seekBar.setProgress(myMusicBinder.getCurrentPostion()); // 设置当前值
+        }
+    }
+
+    // 更新循环图
+    private void updateLoopBackground(){
+        if (myMusicBinder != null){
+            if (myMusicBinder.isLooping()){
+                loop.setBackgroundResource(R.drawable.isloop);
+            }else{
+                loop.setBackgroundResource(R.drawable.loop);
+            }
         }
     }
 

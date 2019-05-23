@@ -31,7 +31,6 @@ public class MusicListActivity extends BaseActivity {
         super.onStart();
         Log.d("MusicListActivity", "onStart()");
         this.refreshMusicList();
-        getPermission();
     }
 
     @Override

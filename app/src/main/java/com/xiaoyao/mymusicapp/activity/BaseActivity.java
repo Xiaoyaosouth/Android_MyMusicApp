@@ -1,6 +1,7 @@
 package com.xiaoyao.mymusicapp.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.*;
@@ -22,44 +23,6 @@ import com.xiaoyao.mymusicapp.service.MyMusicService;
 public class BaseActivity extends AppCompatActivity {
     private IntentFilter intentFilter;
     public ExitBroadcastReceiver exitBroadcastReceiver;
-    public boolean isPermissed; // 记录授权状态
-
-    /**
-     * 获取读取SD卡权限
-     */
-    public boolean getPermission(){
-        //判断Android版本是否大于23
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int checkPermission = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE);
-            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                // 处理后检查
-                if (isPermissed == true){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case 1:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this,"授权成功",Toast.LENGTH_LONG).show();
-                    isPermissed = true;
-                }else{
-                    Toast.makeText(this,"【错误】用户取消授权",Toast.LENGTH_LONG).show();
-                    isPermissed = false;
-                }
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
      * 内部类：广播接收器。用于调用finish()
@@ -181,5 +144,33 @@ public class BaseActivity extends AppCompatActivity {
             spEdit.apply();
             Log.d("SharedPreferences", "保存音乐状态");
         }catch (Exception e){ e.printStackTrace(); }
+    }
+
+    /**
+     * 获取读取SD卡权限
+     */
+    public boolean getReadStoragePermission(Activity activity){
+        int checkPermission = ContextCompat.checkSelfPermission(activity,
+                Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 1:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this,"授权成功",Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(this,"【错误】用户取消授权",Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

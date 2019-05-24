@@ -13,10 +13,11 @@ import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 
-import com.xiaoyao.mymusicapp.pojo.FavoriteMusic;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
 import com.xiaoyao.mymusicapp.R;
 import com.xiaoyao.mymusicapp.service.MyMusicService;
+
+import java.lang.reflect.Method;
 
 /**
  * 该类应是所有活动类的父类，在这里动态注册了一个监听结束活动的广播
@@ -40,6 +41,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        setMenuIconVisible(menu, true);
         return true;
     }
 
@@ -176,6 +178,25 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 利用反射，使Menu的图标可见
+     * @param menu
+     * @param flag 是否可见
+     */
+    public void setMenuIconVisible(Menu menu, boolean flag) {
+        //判断menu是否为空
+        if(menu != null) {
+            try {
+                //如果不为空,就反射拿到menu的setOptionalIconsVisible方法
+                Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                //暴力访问该方法
+                method.setAccessible(true);
+                //调用该方法显示icon
+                method.invoke(menu, flag);
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }

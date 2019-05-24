@@ -88,15 +88,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder>{
         });
     }
 
-    public void refreshMusicList(){
-        try {
-            musicPojoList = MusicUtils.loadMusicList();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return musicPojoList.size();
@@ -108,5 +99,14 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder>{
      */
     public void setOnRecylerItemsClickListener(OnRecyclerItemsClickListener onRecyclerItemsClickListener) {
         mOnRecyclerItemsClickListener = onRecyclerItemsClickListener;
+    }
+
+    public void refreshMusicList(){
+        try {
+            musicPojoList = MusicUtils.loadMusicList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        notifyDataSetChanged();
     }
 }

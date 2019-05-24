@@ -36,8 +36,10 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.FavoriteActivity"></activity>
+        <activity android:name=".activity.SettingActivity"
+            android:launchMode="singleInstance" />
+        <activity android:name=".activity.FavoriteActivity"
+            android:launchMode="singleInstance" />
     </application>
 
 </manifest>

@@ -5,19 +5,23 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
-import com.xiaoyao.mymusicapp.pojo.FavoriteMusic;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
+import com.xiaoyao.mymusicapp.utils.MusicUtils;
 
 import java.util.*;
 
 public class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdapter.ViewHolder>{
 
-    private List<FavoriteMusic> fMusicList;
+    private List<MusicPojo> fMusicList;
     // 用于回调
     private OnRecyclerItemsClickListener mOnRecyclerItemsClickListener;
 
     //构造方法
-    public FavoriteMusicAdapter(List<FavoriteMusic> fMusicList) {
+    public FavoriteMusicAdapter(List<MusicPojo> fMusicList) {
+        this.fMusicList = fMusicList;
+    }
+
+    public void setfMusicList(List<MusicPojo> fMusicList){
         this.fMusicList = fMusicList;
     }
 
@@ -47,7 +51,7 @@ public class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final FavoriteMusic fMusic = fMusicList.get(position);
+        final MusicPojo fMusic = fMusicList.get(position);
         holder.fMusicId.setText(Integer.toString(fMusic.getId())); // 注意将获得的Int转String
         holder.fMusicName.setText(fMusic.getMusicName());
         // 设置收藏按钮图片
@@ -83,7 +87,7 @@ public class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdap
                 if (fMusic.isSaved()){
                     fMusic.save(); // 更新数据库
                 }
-
+                refreshFavoriteMusicList();
             }
         });
     }
@@ -99,5 +103,12 @@ public class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdap
      */
     public void setOnRecylerItemsClickListener(OnRecyclerItemsClickListener onRecyclerItemsClickListener) {
         mOnRecyclerItemsClickListener = onRecyclerItemsClickListener;
+    }
+
+    public void refreshFavoriteMusicList(){
+        try {
+            fMusicList = MusicUtils.loadFavoriteMusicList();
+        }catch (Exception e){ e.printStackTrace(); }
+        notifyDataSetChanged();
     }
 }

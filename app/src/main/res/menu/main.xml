@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_musicList"
-        android:title="歌曲列表" />
+        android:title="歌曲列表"
+        android:icon="@drawable/music"/>
     <item
         android:id="@+id/menu_scanMusic"
-        android:title="扫描歌曲" />
+        android:title="扫描歌曲"
+        android:icon="@android:drawable/ic_menu_search"/>
     <item
         android:id="@+id/menu_musicPlayer"
-        android:title="播放界面" />
-    <item
-        android:id="@+id/menu_setting"
-        android:title="设置" />
+        android:title="播放界面"
+        android:icon="@drawable/disk"/>
     <item
         android:title="我的收藏"
-        android:id="@+id/myFavorite"/>
+        android:id="@+id/myFavorite"
+        android:icon="@drawable/love"/>
     <item
         android:title="" />
     <item
+        android:id="@+id/menu_setting"
+        android:title="设置"
+        android:icon="@android:drawable/ic_menu_preferences"/>
+    <item
         android:id="@+id/menu_exit"
-        android:title="停止播放并退出程序" />
+        android:title="退出程序"
+        android:icon="@drawable/shutdown"/>
 </menu>

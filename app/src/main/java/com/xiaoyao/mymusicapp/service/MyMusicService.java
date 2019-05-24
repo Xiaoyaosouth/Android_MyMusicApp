@@ -67,15 +67,14 @@ public class MyMusicService extends Service {
         }
 
         // 重置音乐状态，设置音乐文件的路径，并进入准备状态
-        public <T> void initMediaPlayer(T music){
+        public void initMediaPlayer(MusicPojo music){
             try{
-                this.currentMusic = (MusicPojo)music;
-                myMediaPlayer.reset();
-                myMediaPlayer.setDataSource(((MusicPojo) music).getMusicPath());
-                myMediaPlayer.prepare();
-                Log.d("MyMusicService", "重置音乐状态，设置音乐路径，准备状态，等待播放");
+                this.currentMusic = music;
+                myMediaPlayer.reset(); // 重置音乐状态
+                myMediaPlayer.setDataSource(music.getMusicPath()); // 设置音乐源
+                myMediaPlayer.prepare(); // 准备状态
             } catch (IOException e) {
-                Log.d("MyMusicService", "设置音乐路径错误");
+                Log.d("音乐服务日志", "设置音乐路径错误");
                 e.printStackTrace();
             }
         }

@@ -3,7 +3,6 @@ package com.xiaoyao.mymusicapp.utils;
 import android.media.*;
 import android.util.Log;
 
-import com.xiaoyao.mymusicapp.pojo.FavoriteMusic;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
 
 import org.litepal.LitePal;
@@ -93,69 +92,22 @@ public class MusicUtils {
     }
 
     /**
-     * 从数据库读取收藏的音乐
+     * 获得收藏的音乐
      * @return
      */
-    public static List<FavoriteMusic> loadFavoriteMusicList(){
-        List<FavoriteMusic> fMusicList = DataSupport.findAll(FavoriteMusic.class);
-        if (fMusicList.isEmpty()){
-            Log.d("音乐工具类", "【错误】从数据库获得的音乐列表为空");
-            return null;
-        }
-        Log.d("音乐工具类", "【完成】从数据库读取收藏音乐列表");
-        return fMusicList;
-    }
-
-    /**
-     * 保存收藏音乐到数据库
-     */
-    public static void saveFavoriteMusicList() {
-        List<FavoriteMusic> fMusicList = new ArrayList<>();
-        // 从音乐表读取收藏的音乐
+    public static List<MusicPojo> loadFavoriteMusicList(){
+        // 从音乐表读取收藏的音乐。注：litepal中fasle为0，true为1
         List<MusicPojo> musicList = DataSupport
-                .select("musicName","musicPath", "musicArtist","musicDuration","isLove")
-                .where("isLove = ?", "true").find(MusicPojo.class);
+                .where("isLove = ?", "1").find(MusicPojo.class);
         if (musicList.isEmpty()){
-            Log.d("音乐工具类", "【错误】数据库中无收藏的音乐");
+            Log.d("音乐工具类", "【错误】读取失败，数据库中无收藏的音乐");
         }
         // 重置ID并添加到List
         for (int i = 0; i < musicList.size(); i++){
-            FavoriteMusic fm = new FavoriteMusic();
-            fm.setId(i);
-            fm.setMusicName(musicList.get(i).getMusicName());
-            fm.setMusicPath(musicList.get(i).getMusicPath());
-            fm.setMusicArtist(musicList.get(i).getMusicArtist());
-            fm.setMusicDuration(musicList.get(i).getMusicDuration());
-            fm.setLove(true);
-            fMusicList.add(fm);
+            musicList.get(i).setId(i + 1);
+            Log.d("音乐工具类", "读取到收藏的音乐：【id】" + musicList.get(i).getId()
+                    + " 【name】" + musicList.get(i).getMusicName());
         }
-        Log.d("音乐工具类", "【完成】从数据库读取收藏的音乐");
-
-        LitePal.getDatabase(); // 创建数据库
-        List<FavoriteMusic> oldList = loadFavoriteMusicList(); // 数据库中原来的List
-        if (oldList == null) {
-            DataSupport.saveAll(fMusicList);
-            Log.d("数据库操作日志", "原收藏音乐列表为空，直接全部添加");
-        } else {
-            /**
-             *  【保存逻辑】每扫描到一个音乐文件，
-             *  就在数据库判断这项是否存在，无则添加。*/
-            for (int i = 0; i < fMusicList.size(); i++) {
-                // 如果新文件在数据库中不存在，则添加
-                String tempPath = fMusicList.get(i).getMusicPath();
-                // 查询。若修改了Pojo则这里也要改。
-                FavoriteMusic tempFm = DataSupport.select
-                        ("id", "musicName", "musicPath", "isLove")
-                        .where("musicPath = ?", tempPath)
-                        .findFirst(FavoriteMusic.class);
-                if (tempFm != null) {
-                    Log.d("数据库操作日志", "【不添加】存在相同音乐文件：" + tempFm.getMusicName());
-                } else {
-                    fMusicList.get(i).save();
-                    Log.d("数据库操作日志", "【添加】" + fMusicList.get(i).getMusicName());
-                }
-            }
-        }
+        return musicList;
     }
-
 }

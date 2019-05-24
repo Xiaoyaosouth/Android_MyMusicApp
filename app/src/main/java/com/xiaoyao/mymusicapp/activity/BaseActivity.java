@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.Toast;
 
+import com.xiaoyao.mymusicapp.pojo.FavoriteMusic;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
 import com.xiaoyao.mymusicapp.R;
 import com.xiaoyao.mymusicapp.service.MyMusicService;
@@ -68,6 +69,10 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case R.id.menu_setting:
 
+                break;
+            case R.id.myFavorite:
+                intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+                startActivity(intent);
                 break;
         }
         return true;

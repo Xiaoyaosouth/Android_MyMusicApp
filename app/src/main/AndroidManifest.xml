@@ -23,20 +23,21 @@
             android:launchMode="singleInstance" />
         <activity
             android:name=".activity.PlayerActivity"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".activity.ChooseDirectoryActivity"
             android:launchMode="singleInstance" />
         <activity
             android:name=".activity.MusicListActivity"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleInstance" />
 
         <service
             android:name=".service.MyMusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.FavoriteActivity"></activity>
     </application>
 
 </manifest>

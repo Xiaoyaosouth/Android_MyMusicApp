@@ -5,34 +5,34 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 
+import com.xiaoyao.mymusicapp.pojo.FavoriteMusic;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
-import com.xiaoyao.mymusicapp.utils.MusicUtils;
 
 import java.util.*;
 
-public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder>{
+public class FavoriteMusicAdapter extends RecyclerView.Adapter<FavoriteMusicAdapter.ViewHolder>{
 
-    private List<MusicPojo> musicPojoList;
+    private List<FavoriteMusic> fMusicList;
     // 用于回调
     private OnRecyclerItemsClickListener mOnRecyclerItemsClickListener;
 
     //构造方法
-    public MusicAdapter(List<MusicPojo> musicPojoList) {
-        this.musicPojoList = musicPojoList;
+    public FavoriteMusicAdapter(List<FavoriteMusic> fMusicList) {
+        this.fMusicList = fMusicList;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        View musicPojoView;
-        TextView musicId; // 音乐ID
-        TextView musicName; // 音乐名
+        View fMusicView;
+        TextView fMusicId; // 音乐ID
+        TextView fMusicName; // 音乐名
         ImageButton isLove; // 是否收藏
 
         public ViewHolder(View view) {
             super(view);
-            musicPojoView = view;
-            musicId = (TextView) view.findViewById(R.id.musicId);
-            musicName = (TextView) view.findViewById(R.id.musicName);
-            isLove = (ImageButton) view.findViewById(R.id.imageButton_isLove);
+            fMusicView = view;
+            fMusicId = (TextView) view.findViewById(R.id.favorite_musicId);
+            fMusicName = (TextView) view.findViewById(R.id.favorite_musicName);
+            isLove = (ImageButton) view.findViewById(R.id.favorite_isLove);
         }
     }
 
@@ -40,30 +40,30 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 载入子项布局
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.music_item, parent, false);
+                .inflate(R.layout.favorite_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final MusicPojo musicPojo = musicPojoList.get(position);
-        holder.musicId.setText(Integer.toString(musicPojo.getId())); // 注意将获得的Int转String
-        holder.musicName.setText(musicPojo.getMusicName());
+        final FavoriteMusic fMusic = fMusicList.get(position);
+        holder.fMusicId.setText(Integer.toString(fMusic.getId())); // 注意将获得的Int转String
+        holder.fMusicName.setText(fMusic.getMusicName());
         // 设置收藏按钮图片
-        if (musicPojo.isLove()){
+        if (fMusic.isLove()){
             holder.isLove.setImageResource(R.drawable.love);
         }else{
             holder.isLove.setImageResource(R.drawable.unlove);
         }
 
-        holder.musicPojoView.setOnClickListener(new View.OnClickListener() {
+        holder.fMusicView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 使用回调给Activity处理
                 if (mOnRecyclerItemsClickListener != null){
                     // 将点击后的子项MusicPojo回调
-                    mOnRecyclerItemsClickListener.onRecyclerItemsClick(v, musicPojoList.get(position));
+                    mOnRecyclerItemsClickListener.onRecyclerItemsClick(v, fMusicList.get(position));
                 }
             }
         });
@@ -71,35 +71,26 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.ViewHolder>{
         holder.isLove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (musicPojo.isLove()){
-                    musicPojo.setLove(false);
+                if (fMusic.isLove()){
+                    fMusic.setLove(false);
                     holder.isLove.setImageResource(R.drawable.unlove);
-                    Log.d("MusicAdapter","【取消收藏】"+musicPojo.getMusicName());
+                    Log.d("MusicAdapter","【取消收藏】"+fMusic.getMusicName());
                 }else {
-                    musicPojo.setLove(true);
+                    fMusic.setLove(true);
                     holder.isLove.setImageResource(R.drawable.love);
-                    Log.d("MusicAdapter","【收藏】"+musicPojo.getMusicName());
+                    Log.d("MusicAdapter","【收藏】"+fMusic.getMusicName());
                 }
-                if (musicPojo.isSaved()){
-                    musicPojo.save(); // 更新数据库
+                if (fMusic.isSaved()){
+                    fMusic.save(); // 更新数据库
                 }
 
             }
         });
     }
 
-    public void refreshMusicList(){
-        try {
-            musicPojoList = MusicUtils.loadMusicList();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
-        return musicPojoList.size();
+        return fMusicList.size();
     }
 
     /**

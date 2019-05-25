@@ -110,4 +110,26 @@ public class MusicUtils {
         }
         return musicList;
     }
+
+    /**
+     * 格式化得到的音乐时间：毫秒转分:秒
+     * @param time
+     * @return
+     */
+    public static String formatMusicTime(int time){
+        // 得到的time为毫秒
+        StringBuilder sb = new StringBuilder();
+        String min = (time / (1000 * 60))+"";
+        String second = (time%(1000*60)/1000)+"";
+        if(min.length()<2){
+            min=0+min;
+        }
+        if(second.length()<2){
+            second=0+second;
+        }
+        sb.append(min);
+        sb.append(":");
+        sb.append(second);
+        return sb.toString();
+    }
 }

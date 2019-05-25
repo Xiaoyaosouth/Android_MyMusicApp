@@ -9,6 +9,7 @@ import android.widget.*;
 import com.xiaoyao.mymusicapp.pojo.MusicPojo;
 import com.xiaoyao.mymusicapp.R;
 import com.xiaoyao.mymusicapp.service.MyMusicService;
+import com.xiaoyao.mymusicapp.utils.MusicUtils;
 import com.xiaoyao.mymusicapp.utils.ServiceUtils;
 
 import org.litepal.crud.DataSupport;
@@ -18,26 +19,25 @@ public class PlayerActivity extends BaseActivity {
     private TextView currentMusicName,currentTime,totalTime;
     private Button playOrPause,prev,next,loop;
     private SeekBar seekBar;
-    private final int STARTHANDLER = 1;
+    private final int START_HANDLER = 1;
     private MyMusicConnection myMusicConnection = new MyMusicConnection();
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case STARTHANDLER:
+                case START_HANDLER:
                     try {
                         if (myMusicBinder != null &&
                                 myMusicBinder.getCurrentMusic() != null) {
+                            updateSeekBar(); // 先更新进度条
                             updateMusicName();
-                            updateCurrentMusicTime();
                             updateTotalMusicTime();
                             updatePlayButtonBackground();
-                            updateSeekBar();
                             updateLoopBackground();
                         }
                     }catch (Exception e){ e.printStackTrace(); }
-                    sendEmptyMessageDelayed(STARTHANDLER, 1000); // 若已触发则定时1000毫秒执行
+                    sendEmptyMessageDelayed(START_HANDLER, 1000); // 若已触发则定时1000毫秒执行
                     break;
             }
         }
@@ -59,7 +59,7 @@ public class PlayerActivity extends BaseActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        handler.sendEmptyMessage(STARTHANDLER); // 开启计时器
+        handler.sendEmptyMessage(START_HANDLER); // 开启计时器
         Log.d("PlayActivity","onStart() end");
     }
 
@@ -112,6 +112,7 @@ public class PlayerActivity extends BaseActivity {
         totalTime = (TextView) findViewById(R.id.totalMusicTime);
 
         seekBar = (SeekBar)findViewById(R.id.seekBar);
+        seekBar.setOnSeekBarChangeListener(new MySeekBarChangeListener());
 
         playOrPause = (Button)findViewById(R.id.play);
         playOrPause.setOnClickListener(new View.OnClickListener() {
@@ -214,38 +215,17 @@ public class PlayerActivity extends BaseActivity {
     private void updateTotalMusicTime(){
         if (myMusicBinder != null) {
             int tTime = myMusicBinder.getDuration();
-            totalTime.setText(getMusicTime(tTime));
+            totalTime.setText(MusicUtils.formatMusicTime(tTime));
         }
     }
     // 更新当前播放时间
     private void updateCurrentMusicTime(){
         if (myMusicBinder != null){
             int cTime = myMusicBinder.getCurrentPostion();
-            currentTime.setText(getMusicTime(cTime));
+            currentTime.setText(MusicUtils.formatMusicTime(cTime));
         }
     }
 
-    /**
-     * 格式化得到的音乐时间：毫秒转分:秒
-     * @param time
-     * @return
-     */
-    private String getMusicTime(int time){
-        // 得到的time为毫秒
-        StringBuilder sb = new StringBuilder();
-        String min = (time / (1000 * 60))+"";
-        String second = (time%(1000*60)/1000)+"";
-        if(min.length()<2){
-            min=0+min;
-        }
-        if(second.length()<2){
-            second=0+second;
-        }
-        sb.append(min);
-        sb.append(":");
-        sb.append(second);
-        return sb.toString();
-    }
     // 更新播放按钮的背景
     private void updatePlayButtonBackground(){
         if (myMusicBinder != null) {
@@ -290,4 +270,49 @@ public class PlayerActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * 内部类 进度条改变监听器
+     */
+    private class MySeekBarChangeListener implements SeekBar.OnSeekBarChangeListener{
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            /**
+             * 进度条改变时，应做如下操作：
+             * 1、代替handler修改当前播放时间
+             * 2、
+             */
+            if (fromUser){
+                currentTime.setText(MusicUtils.formatMusicTime(seekBar.getProgress()));
+                if (myMusicBinder != null){
+                    myMusicBinder.seekTo(seekBar.getProgress());
+                }
+
+            }else{
+                updateCurrentMusicTime();
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            /**
+             * 开始拖动进度条
+             * 1、
+             * 2、需要提前停止handle更新进度条，否则无法更新播放时间
+             */
+            handler.removeCallbacksAndMessages(null); // 停止计时
+            currentTime.setTextSize(36);
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            /**
+             * 停止拖动进度条
+             * 1、
+             * 2、继续让handler更新进度条
+             */
+            handler.sendEmptyMessage(START_HANDLER); // 开始计时
+            currentTime.setTextSize(15); // TextView默认字体大小为15
+        }
+    }
 }

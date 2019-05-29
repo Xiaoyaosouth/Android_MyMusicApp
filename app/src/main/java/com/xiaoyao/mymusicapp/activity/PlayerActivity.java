@@ -143,8 +143,10 @@ public class PlayerActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (myMusicBinder.setReapting(true)){
+                    loop.setBackgroundResource(R.drawable.isloop);
                     Toast.makeText(PlayerActivity.this, "【提示】单曲循环", Toast.LENGTH_LONG).show();
                 }else{
+                    loop.setBackgroundResource(R.drawable.loop);
                     Toast.makeText(PlayerActivity.this, "【提示】取消循环", Toast.LENGTH_LONG).show();
                 }
             }

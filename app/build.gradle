@@ -5,8 +5,8 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.xiaoyao.mymusicapp"
-        minSdkVersion 24
-        targetSdkVersion 24
+        minSdkVersion 17
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

@@ -24,11 +24,11 @@ public class FileUtils {
         Collections.addAll(fileList, sourceFile.listFiles());
         for (File file : fileList) {
             String fileName = file.getName();
-            //默认是未知文件
-            int imageId = R.mipmap.ic_launcher;
-
-            //下面开始判断
+            //默认是文件图标
+            int imageId = R.drawable.file;
+            //下面开始判断文件是文件夹或音乐文件
             if (file.isDirectory()) {
+                // 是文件夹
                 imageId = R.drawable.folder;
             } else {
                 //如果是文件，就从文件名的后缀名来判断是什么文件，从而添加对应图标
@@ -42,7 +42,7 @@ public class FileUtils {
                                 ||Objects.equals(end, ".flac")||Objects.equals(end, ".m4a")
                                 ||Objects.equals(end, ".ape")||Objects.equals(end, ".wav")
                                 ||Objects.equals(end, ".aac")){
-                            //如果是音乐文件
+                            // 如果是音乐文件
                             imageId = R.drawable.music;
                         }
                     }

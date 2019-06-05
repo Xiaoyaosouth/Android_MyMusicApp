@@ -140,21 +140,18 @@ public class ChooseDirectoryActivity extends BaseActivity {
     }
 
     /**
-     * 进入上一级目录的事件
+     * 进入上一级目录
      */
     private void upDir(){
         // 从editText获取当前路径
         String filePath = editText_path.getText().toString();
         if(!filePath.equals(initPath)){
-            File file = new File(filePath);
+            /** BUG: 根目录的上一级目录不能访问 */
             // 获得上一级路径
-            String parentPath = file.getParent();
+            String parentPath = new File(filePath).getParent();
             editText_path.setText(parentPath);
             // 进入上一级目录
             fileAdapter.setFilePojoList(FileUtils.getFileList(new File(parentPath)));
-        }else{
-            // 根目录的上一级目录不能访问
-            Toast.makeText(ChooseDirectoryActivity.this, "无权限，不能再往上了", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -171,9 +168,7 @@ public class ChooseDirectoryActivity extends BaseActivity {
         dialog.setPositiveButton("扫描", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                /**
-                 * 确定扫描。先获取目录路径，然后利用MusicUtils扫描音乐文件并保存
-                 */
+                /** 确定扫描。先获取目录路径，然后利用MusicUtils扫描音乐文件并保存 */
                 MusicUtils musicUtils = new MusicUtils();
                 List<File> fileList = new FileUtils().searchMusicFiles(dirPath, isScanChildDir);
                 if (fileList.isEmpty()){
@@ -198,9 +193,7 @@ public class ChooseDirectoryActivity extends BaseActivity {
         dialog.create().show();
     }
 
-    /**
-     * 实现抬起回车键时隐藏键盘，并跳转文件夹
-     */
+    /** 实现抬起回车键时隐藏键盘，并跳转文件夹 */
     private View.OnKeyListener enterActionUp = new View.OnKeyListener() {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -215,19 +208,20 @@ public class ChooseDirectoryActivity extends BaseActivity {
                 String tempPath = editText_path.getText().toString();
                 File file = new File(tempPath);
                 if (file.exists()){ // 如果目录存在
-                    /**
-                     * BUG：如果目录是/storage/emulated/0之前的目录，会无法跳转
-                     */
-                    Log.d("编辑框操作日志", "进入指定目录：" + tempPath);
+                    /** BUG:如果目录是/storage/emulated/0之前的目录，会无法跳转 */
+                    Log.d("编辑框操作日志", "尝试进入指定目录：" + tempPath);
                     try {
                         fileAdapter.setFilePojoList(FileUtils.getFileList(new File(tempPath)));
                     }catch (Exception e){}
                 }else{
+                    editText_path.setText(initPath);
+                    fileAdapter.setFilePojoList(FileUtils.getFileList(new File(initPath)));
                     Toast.makeText(ChooseDirectoryActivity.this,
-                            "【错误】跳转失败，目录不存在", Toast.LENGTH_SHORT).show();
+                            "【错误】目录不存在", Toast.LENGTH_LONG).show();
                 }
             }
             return false;
         }
     };
+
 }

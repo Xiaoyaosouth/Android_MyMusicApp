@@ -118,10 +118,10 @@ public class FileUtils {
                 String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
                 Log.d("扫描日志","文件名："+fileName+" 识别的扩展名："+extension);
                 //判断扩展名
-                if (extension.equals("mp3") || extension.equals("aac")
-                        || extension.equals("3gp") || extension.equals("m4a")
-                        || extension.equals("flac") || extension.equals("wav")
-                        || extension.equals("ogg") || extension.equals("ape")){
+                if (extension.equalsIgnoreCase("mp3") || extension.equalsIgnoreCase("aac")
+                        || extension.equalsIgnoreCase("3gp") || extension.equalsIgnoreCase("m4a")
+                        || extension.equalsIgnoreCase("flac") || extension.equalsIgnoreCase("wav")
+                        || extension.equalsIgnoreCase("ogg") || extension.equalsIgnoreCase("ape")){
                     fileList.add(f);
                 }else{
                     Log.d("扫描日志","【"+fileName+"】不是音乐文件");
